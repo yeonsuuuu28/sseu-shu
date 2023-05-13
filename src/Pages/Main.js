@@ -4,6 +4,7 @@ import { Button, TextField }  from '@mui/material';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
 
 const Main = () => {
@@ -33,10 +34,10 @@ const Main = () => {
                         로그인하기
                     </div>
                     :
-                    <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer", position: "relative", display: "inline-block"}}
+                    <div style={{display:"flex", flexwrap: "wrap", alignItems: "center", float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
                         onClick={() => {setOpen(!open)}} href="# ">
                             {/* () => {signOutWithGoogle(); setUserInfo(null); window.location.reload();} */}
-                        {userInfo.displayName}
+                        {userInfo.displayName}<ArrowDropDownIcon/>
                     </div>
                 }
                 <div style={{fontSize: "17pt", fontWeight: "500", color: "white", 
