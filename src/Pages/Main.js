@@ -10,8 +10,6 @@ const Main = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
 
-    console.log(auth.currentUser)
-    
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
             const user = result.user;
@@ -20,15 +18,11 @@ const Main = () => {
         })
       }, []);
 
-      useEffect(() => {
-        return auth.onAuthStateChanged(user => {
-            setUserInfo(user);
-        })
-      }, []);
-
-      useEffect(() => {
-        setUserInfo(auth.currentUser)
-      }, [auth.currentUser]);
+    useEffect(() => {
+    return auth.onAuthStateChanged(user => {
+        setUserInfo(user);
+    })
+    }, []);
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
@@ -56,7 +50,7 @@ const Main = () => {
                         <a style={{textDecoration: "none", color: "black"}} href="/">내 페이지</a><br/>
                         <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.reload();}} href="# ">로그아웃하기</a>
                     </div> 
-                    : <div></div>}
+            : <div></div>}
         </div>
     )
 }
