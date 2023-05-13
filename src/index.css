@@ -11,3 +11,57 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "Lato";
+  font-weight: 400;
+  src: url(./Fonts/Lato-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Lato";
+  font-weight: 500;
+  src: url(./Fonts/Lato-Bold.ttf);
+}
+
+@font-face {
+  font-family: "Lato";
+  font-weight: 700;
+  src: url(./Fonts/Lato-Black.ttf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 400;
+  src: url(./Fonts/Pretendard-Regular.otf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 500;
+  src: url(./Fonts/Pretendard-Medium.otf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 600;
+  src: url(./Fonts/Pretendard-SemiBold.otf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 700;
+  src: url(./Fonts/Pretendard-Bold.otf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 800;
+  src: url(./Fonts/Pretendard-ExtraBold.otf);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 900;
+  src: url(./Fonts/Pretendard-Black.otf);
+}
