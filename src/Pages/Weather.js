@@ -8,6 +8,14 @@ import Logo from "../Assets/logo_3.png"
 import Weather_Image from "../Assets/weather.svg"
 import axios from 'axios'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 
 const Weather = () => {
     const [userInfo, setUserInfo] = useState(null)
@@ -39,13 +47,22 @@ const Weather = () => {
             setWeather({
               id: data.weather[0].id,
               temperature: data.main.temp - 273.15,
-              feels_like: data.main.feels_like,
+              feels_like: data.main.feels_like - 273.15,
+              max: data.main.temp_max - 273.15,
+              min: data.main.temp_min - 273.15,
               humidity: data.main.humidity,
               main: data.weather[0].main,
               description: data.weather[0].description,
             });
           });
-        }, []);
+        },
+    []);
+
+    function createData(temp, feels_like, max, min, humidity) {
+        return { temp, feels_like, max, min, humidity };
+    }
+          
+    const rows = [createData(weather.temperature, weather.feels_like, weather.max, weather.min, weather.humidity)];
 
     return (
         
@@ -75,12 +92,41 @@ const Weather = () => {
                         <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.reload();}} href="# ">로그아웃하기</a>
                     </div> 
             : <div></div>}
-            <div style={{fontFamily: "Pretendard", fontSize: "25pt", display: "flex", flexwrap: "wrap", fontWeight: "700", alignItems: "center", verticalAlign: "middle", textAlign: "center", width: "100%", margin: "0 auto", justifyContent: "center", paddingTop: "15vh"}}>
+            <div style={{fontFamily: "Pretendard", fontSize: "25pt", display: "flex", flexwrap: "wrap", fontWeight: "700", alignItems: "center", verticalAlign: "middle", textAlign: "center", width: "100%", margin: "0 auto", justifyContent: "center", paddingTop: "13vh"}}>
                 오늘의 날씨는 {weather.description}입니다&nbsp; <SentimentSatisfiedAltIcon fontSize="large"/>
             </div>
             <div style={{textAlign: "center", paddingTop: "8vh"}}>
-                <img src = {Weather_Image} alt="" style={{height: "35vh", zIndex: "-1"}}/>
+                <img src = {Weather_Image} alt="" style={{height: "34vh", zIndex: "-1"}}/>
             </div>
+            <div style={{width: "100%", paddingTop: "8vh"}}>
+            <TableContainer>
+                <Table sx={{width: "60vw", margin: "auto"}} size="small" aria-label="a dense table">
+                    <TableHead>
+                    <TableRow>
+                        <TableCell align="center" sx={{width: "10vw", fontFamily: "Pretendard", fontSize: "14pt", fontWeight: "600"}}>현재 온도</TableCell>
+                        <TableCell align="center" sx={{width: "10vw", fontFamily: "Pretendard", fontSize: "14pt", fontWeight: "600"}}>체감 온도</TableCell>
+                        <TableCell align="center" sx={{width: "10vw", fontFamily: "Pretendard", fontSize: "14pt", fontWeight: "600"}}>최고 온도</TableCell>
+                        <TableCell align="center" sx={{width: "10vw", fontFamily: "Pretendard", fontSize: "14pt", fontWeight: "600"}}>최저 온도</TableCell>
+                        <TableCell align="center" sx={{width: "10vw", fontFamily: "Pretendard", fontSize: "14pt", fontWeight: "600"}}>습도</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {rows.map((row) => (
+                        <TableRow
+                        key={row.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.temp.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.feels_like.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.max.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.min.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.humidity}%</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+                </div>
         </div>
     )
 }
