@@ -6,6 +6,7 @@ import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
+import Rain from "../Assets/raining.svg"
 
 const Main = () => {
     const [userInfo, setUserInfo] = useState(null)
@@ -52,6 +53,19 @@ const Main = () => {
                         <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.reload();}} href="# ">로그아웃하기</a>
                     </div> 
             : <div></div>}
+            <div style={{textAlign: "right", position: "absolute", paddingLeft: "52vw", paddingTop: "20vh", zIndex: "-1"}}>
+                <img src = {Rain} alt="" style={{height: "55vh", zIndex: "-1"}}/>
+            </div>
+            <div style={{textAlign: "left", paddingTop: "25vh", paddingLeft: "10vw", fontFamily: "Pretendard", lineHeight: "1.5"}}>
+                <div style={{fontSize: "23pt"}}>카이스트 공유 우산 시스템 <br/></div>
+                <div style={{fontSize: "65pt", fontWeight: "900"}}>쓰슈</div>
+                <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "#2B04BE", marginTop: "7vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left"}}>
+                    <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>대여/반납</div>
+                </div>
+                <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "white", marginTop: "7vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "10px", border: "1px solid #2B04BE"}}>
+                    <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>오늘의 날씨</div>
+                </div>
+            </div>
         </div>
     )
 }
