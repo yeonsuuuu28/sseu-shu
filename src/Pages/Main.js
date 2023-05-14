@@ -37,14 +37,13 @@ const Main = () => {
                     :
                     <div style={{display:"flex", flexwrap: "wrap", alignItems: "center", float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
                         onClick={() => {setOpen(!open)}} href="# ">
-                            {/* () => {signOutWithGoogle(); setUserInfo(null); window.location.reload();} */}
                         {userInfo.displayName}<ArrowDropDownIcon/>
                     </div>
                 }
                 <div style={{fontSize: "17pt", fontWeight: "500", color: "white", 
                     lineHeight: "3.0vh", height: "3.0vh", letterSpacing: "0.75px", 
                     paddingTop: "1vh", paddingLeft: "1vw"}}>
-                    <img src = {Logo} alt="" style={{height: "8vh"}}/>
+                    <img src = {Logo} alt="" style={{height: "8vh", cursor: "pointer"}} onClick={() => {window.location.href = "/main"}}/>
                 </div>
             </div>
             {open ? 
@@ -54,7 +53,7 @@ const Main = () => {
                     </div> 
             : <div></div>}
             <div style={{textAlign: "right", position: "absolute", paddingLeft: "52vw", paddingTop: "20vh", zIndex: "-1"}}>
-                <img src = {Rain} alt="" style={{height: "55vh", zIndex: "-1"}}/>
+                <img src = {Rain} alt="" style={{height: "55vh", zIndex: "-1"}}></img>
             </div>
             <div style={{textAlign: "left", paddingTop: "25vh", paddingLeft: "10vw", fontFamily: "Pretendard", lineHeight: "1.5"}}>
                 <div style={{fontSize: "23pt"}}>카이스트 공유 우산 시스템 <br/></div>
@@ -62,7 +61,8 @@ const Main = () => {
                 <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "#2B04BE", marginTop: "7vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left"}}>
                     <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>대여/반납</div>
                 </div>
-                <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "white", marginTop: "7vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "10px", border: "1px solid #2B04BE"}}>
+                <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "white", marginTop: "7vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "10px", border: "1px solid #2B04BE"}}
+                    onClick={() => {window.location.href = "/weather"}}>
                     <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>오늘의 날씨</div>
                 </div>
             </div>

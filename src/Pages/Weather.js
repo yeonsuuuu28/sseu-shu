@@ -63,10 +63,11 @@ const Weather = () => {
     }
           
     const rows = [createData(weather.temperature, weather.feels_like, weather.max, weather.min, weather.humidity)];
+    
 
     return (
-        
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
+            {console.log(weather)}
             <div style={{backgroundColor: "#2B04BE", height: "10vh", lineHeight: "10vh"}}>
                 {userInfo === null ? 
                     <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
@@ -76,14 +77,13 @@ const Weather = () => {
                     :
                     <div style={{display:"flex", flexwrap: "wrap", alignItems: "center", float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
                         onClick={() => {setOpen(!open)}} href="# ">
-                            {/* () => {signOutWithGoogle(); setUserInfo(null); window.location.reload();} */}
                         {userInfo.displayName}<ArrowDropDownIcon/>
                     </div>
                 }
                 <div style={{fontSize: "17pt", fontWeight: "500", color: "white", 
                     lineHeight: "3.0vh", height: "3.0vh", letterSpacing: "0.75px", 
                     paddingTop: "1vh", paddingLeft: "1vw"}}>
-                    <img src = {Logo} alt="" style={{height: "8vh"}}/>
+                    <img src = {Logo} alt="" style={{height: "8vh", cursor: "pointer"}} onClick={() => {window.location.href = "/main"}}/>
                 </div>
             </div>
             {open ? 
@@ -111,18 +111,13 @@ const Weather = () => {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                        key={row.name}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.temp.toFixed(2)}</TableCell>
-                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.feels_like.toFixed(2)}</TableCell>
-                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.max.toFixed(2)}</TableCell>
-                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.min.toFixed(2)}</TableCell>
-                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{row.humidity}%</TableCell>
+                        <TableRow key="1" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{weather.temperature?.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{weather.feels_like?.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{weather.max?.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{weather.min?.toFixed(2)}</TableCell>
+                        <TableCell align="center" sx={{fontfamily: "Pretendard", fontSize: "12pt", fontWeight: "400", paddingTop: "2vh"}}>{weather.humidity}%</TableCell>
                         </TableRow>
-                    ))}
                     </TableBody>
                 </Table>
                 </TableContainer>
