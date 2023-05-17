@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, TextField }  from '@mui/material';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -14,8 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
 
 const Weather = () => {
     const [userInfo, setUserInfo] = useState(null)

@@ -7,10 +7,15 @@ import { ref, set, update, child, get, onValue, getDatabase } from "firebase/dat
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
 import Rain from "../Assets/raining.svg"
+import Return from "../Assets/return.svg"
+import Borrow from "../Assets/borrow.svg"
+import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
 
 const BorrowReturn = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
+    const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -49,9 +54,29 @@ const BorrowReturn = () => {
             {open ? 
                     <div style={{float: "right", paddingRight: "3vw", paddingLeft: "3vw", paddingTop: "2vh", paddingBottom: "2vh", lineHeight: "2.5", fontFamily: "Pretendard", fontWeight: "600", textAlign: "center", borderLeft: "1px solid black", borderBottom: "1px solid black", backgroundColor: "white"}}>
                         <a style={{textDecoration: "none", color: "black"}} href="/">내 페이지</a><br/>
-                        <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.reload();}} href="# ">로그아웃하기</a>
-                    </div> 
+                        <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.href = "/main";}} href="# ">로그아웃하기</a>
+                    </div>
             : <div></div>}
+            <div>
+                <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
+                    <tr>
+                        <td style={{borderRight: "0px solid black", textAlign: "center"}}>
+                            <div className="zoom" style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                                <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
+                                <div style={{paddingTop: "3vh"}}></div>
+                                대여하기
+                            </div>
+                        </td>
+                        <td style={{borderLeft: "0.5px solid black", textAlign: "center"}}>
+                            <div className="zoom" style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                                <ArrowCircleUpRoundedIcon style={{fontSize: "18vw"}}/>
+                                <div style={{paddingTop: "3vh"}}></div>
+                                반납하기
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     )
 }
