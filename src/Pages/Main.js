@@ -59,7 +59,7 @@ const Main = () => {
                 <div style={{fontSize: "23pt"}}>카이스트 공유 우산 시스템 <br/></div>
                 <div style={{fontSize: "65pt", fontWeight: "900"}}>쓰슈</div>
                 <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "#2B04BE", marginTop: "7vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left"}}
-                    onClick={() => {window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn"}}>
+                    onClick={() => {if (userInfo === null) {alert("우산 대여/반납을 위해서는 로그인 해주세요.")} else {window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn"}}}>
                     <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>대여/반납</div>
                 </div>
                 <div style={{cursor: "pointer", height: "45px", width: "150px", backgroundColor: "white", marginTop: "7vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "10px", border: "1px solid #2B04BE"}}
