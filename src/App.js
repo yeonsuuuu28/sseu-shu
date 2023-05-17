@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route, Switch} from "react-router-dom";
 
 import Main from "./Pages/Main"
 import Weather from "./Pages/Weather"
+import BorrowReturn from "./Pages/BorrowReturn"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/main" element={<Main/>}/>
           <Route path="/weather" element={<Weather/>}/>
+          <Route path="/:username/borrowreturn" element={<BorrowReturn/>}/>
         </Routes>
       </BrowserRouter>
     </div>
