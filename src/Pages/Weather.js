@@ -44,6 +44,14 @@ const Weather = () => {
     useEffect(() => {
         axios.get(url).then((responseData) => {
             const data = responseData.data;
+            let description_kr = ""
+            if (data.weather[0].description === "온흐림") {
+                description_kr = "흐림"
+            }
+            else {
+                description_kr = data.weather[0].description
+            }
+            console.log(description_kr)
             setWeather({
               id: data.weather[0].id,
               temperature: data.main.temp - 273.15,
@@ -52,7 +60,7 @@ const Weather = () => {
               min: data.main.temp_min - 273.15,
               humidity: data.main.humidity,
               main: data.weather[0].main,
-              description: data.weather[0].description,
+              description: description_kr,
             });
           });
         },
