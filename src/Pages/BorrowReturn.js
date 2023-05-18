@@ -62,7 +62,7 @@ const BorrowReturn = () => {
         });
     }
 
-    function handleborrow1() {
+    function handleborrow2() {
         setPage("borrow2")
 
         const db = getDatabase();
@@ -70,6 +70,7 @@ const BorrowReturn = () => {
         update(ref(db, 'users/' + username), {
             borrow_place: "North",
         });
+        console.log(page)
     }
 
 
@@ -108,7 +109,7 @@ const BorrowReturn = () => {
                     <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
                         <tr>
                             <td style={{borderRight: "0px solid black", textAlign: "center"}}>
-                                <div className="zoom" onClick={() => handleborrow1()}style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                                <div className="zoom" onClick={() => handleborrow1()} style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
                                     <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
                                     <div style={{paddingTop: "3vh"}}></div>
                                     대여하기
