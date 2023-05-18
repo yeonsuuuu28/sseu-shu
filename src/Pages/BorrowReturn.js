@@ -9,12 +9,15 @@ import Logo from "../Assets/logo_3.png"
 import Rain from "../Assets/raining.svg"
 import Return from "../Assets/return.svg"
 import Borrow from "../Assets/borrow.svg"
+import Map from "../Assets/map.png"
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
 
 const BorrowReturn = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
+    const [page, setPage] = useState("landing")
+    const [umbrella, setUmbrella] = useState("")
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
 
     useEffect(() => {
@@ -24,12 +27,43 @@ const BorrowReturn = () => {
             setUserInfo(user)
         })
       }, []);
-
+    
     useEffect(() => {
     return auth.onAuthStateChanged(user => {
         setUserInfo(user);
     })
     }, []);
+
+    useEffect(() => {
+        const db = getDatabase();
+        const dbRef = ref(db)
+        get(child(dbRef, 'umbrellas/')).then((snapshot) => {
+            setUmbrella(Object.entries(snapshot.val()))
+        })
+    })
+
+    function handleborrow1() {
+        setPage("borrow1")
+
+        let timenow = 0
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const date2 = date.getDate();
+        const dateStr = year + "-" + month + "-" + date2
+        timenow = dateStr
+
+        const db = getDatabase();
+        const dbRef = ref(db)
+        update(ref(db, 'users/' + username), {
+            borrow_date: timenow,
+            borrow: true
+        });
+    }
+
+    function handlereturn() {
+        
+    }
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
@@ -57,26 +91,50 @@ const BorrowReturn = () => {
                         <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.href = "/main";}} href="# ">로그아웃하기</a>
                     </div>
             : <div></div>}
-            <div>
-                <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
-                    <tr>
-                        <td style={{borderRight: "0px solid black", textAlign: "center"}}>
-                            <div className="zoom" style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
-                                <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
-                                <div style={{paddingTop: "3vh"}}></div>
-                                대여하기
-                            </div>
-                        </td>
-                        <td style={{borderLeft: "0.5px solid black", textAlign: "center"}}>
-                            <div className="zoom" style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
-                                <ArrowCircleUpRoundedIcon style={{fontSize: "18vw"}}/>
-                                <div style={{paddingTop: "3vh"}}></div>
-                                반납하기
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            {page === "landing" ? 
+                <div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "72vh"}}>
+                    <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
+                        <tr>
+                            <td style={{borderRight: "0px solid black", textAlign: "center"}}>
+                                <div className="zoom" onClick={() => handleborrow1()}style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                                    <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
+                                    <div style={{paddingTop: "3vh"}}></div>
+                                    대여하기
+                                </div>
+                            </td>
+                            <td style={{borderLeft: "0.5px solid black", textAlign: "center"}}>
+                                <div className="zoom" style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                                    <ArrowCircleUpRoundedIcon style={{fontSize: "18vw"}}/>
+                                    <div style={{paddingTop: "3vh"}}></div>
+                                    반납하기
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            : <div></div>}
+            {page === "borrow1" ? 
+                <div style={{textAlign: "center"}}>
+                    <img src = {Map} alt="" style={{height: "65vh", paddingTop: "8vh", opacity: "0.4"}}/>
+                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                        backgroundColor: "#2B04BE", width: "5vh", height: "5vh", top: "40%", left: "46%", transform: "translate(-50%, -50%)", color: "white",
+                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", cursor: "pointer", boxShadow: "5px 5px 10px grey", zIndex: "2"}}>
+                        {umbrella[1][1]}
+                    </div>
+                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "64.5%", left: "42.5%", transform: "translate(-50%, -50%)", color: "white",
+                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                        {umbrella[2][1]}
+                    </div>
+                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "61%", left: "52%", transform: "translate(-50%, -50%)", color: "white",
+                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                        {umbrella[0][1]}
+                    </div>
+                    <div style={{fontFamily: "Pretendard", fontSize: "5vh", fontWeight: "700", paddingTop: "2vh"}}>대여 장소를 선택해주세요</div>
+                </div>
+            : <div></div>}
+
         </div>
     )
 }
