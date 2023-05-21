@@ -6,19 +6,9 @@ import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
-import Rain from "../Assets/raining.svg"
-import Return from "../Assets/return.svg"
-import Borrow from "../Assets/borrow.svg"
+import Card from "../Assets/card.svg"
 import Map from "../Assets/map.png"
-import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
-import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 
 const Returning = () => {
     const [userInfo, setUserInfo] = useState(null)
@@ -59,16 +49,21 @@ const Returning = () => {
     function handleborrow1() {
         const db = getDatabase();
         const dbRef = ref(db)
-        let remaining = token - 50
-        if (remaining >= 0) {
+        let remaining_token = token - 50
+        let remaining_umbre = umbrella[1][1] - 1
+        if (remaining_token >= 0) {
             update(ref(db, 'users/' + username), {
                 borrow_place: "North",
-                total_token: remaining
+                total_token: remaining_token
+            });
+            update(ref(db, 'umbrellas/'), {
+                North: remaining_umbre
             });
             setPage(2)
         }
         else {
-            alert("토큰이 부족하여 대여를 진행할 수 없습니다.")
+            alert("토큰이 부족하여 대여를 진행할 수 없습니다.");
+            window.location.href = "/main"
         }
 
     }

@@ -18,6 +18,7 @@ const BorrowReturn = () => {
     const [open, setOpen] = useState(false)
     const [umbrella, setUmbrella] = useState("")
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
+    const [borrowed, setBorrowed] = useState(false)
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -36,10 +37,10 @@ const BorrowReturn = () => {
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db)
-        get(child(dbRef, 'umbrellas/')).then((snapshot) => {
-            setUmbrella(Object.entries(snapshot.val()))
+        get(child(dbRef, 'users/' + username)).then((snapshot) => {
+            setBorrowed(snapshot.val()["borrow"])
         })
-    })
+    }, [])
 
     function handleborrow() {
         let timenow = 0
@@ -108,7 +109,7 @@ const BorrowReturn = () => {
                 <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
                     <tr>
                         <td style={{borderRight: "0px solid black", textAlign: "center"}}>
-                            <div className="zoom" onClick={() => handleborrow()} style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                            <div className="zoom" onClick={() => {if (borrowed) {alert("이미 대여하신 우산이 있습니다. 반납 후 이용 바랍니다."); window.location.href = "/main";} else {handleborrow()}}} style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
                                 <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
                                 <div style={{paddingTop: "3vh"}}></div>
                                 대여하기
