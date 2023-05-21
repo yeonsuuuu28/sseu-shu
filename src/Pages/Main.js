@@ -35,21 +35,16 @@ const Main = () => {
         else {
             get(child(dbRef, 'users/')).then((snapshot) => {
                 if (snapshot.exists()) {
-                    // window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn";
                     if (Object.keys(snapshot.val()).includes(userInfo.email.split("@")[0])) {
                         window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn";
                     }
                     else {
                         set(ref(db, 'users/' + userInfo.email.split('@')[0]), {
                             RFID_user: "11 AA 11 AA",
-                            RFID_umbrella: "none",
                             borrow: false,
                             return: false,
-                            borrow_place: "none",
                             borrow_date: "none",
                             days_elapsed: "none",
-                            weight_before: 1000,
-                            weight_after: "none",
                             total_token: 100,
                         });
                         window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn";
@@ -58,20 +53,22 @@ const Main = () => {
                 else {
                     set(ref(db, 'users/' + userInfo.email.split('@')[0]), {
                         RFID_user: "11 AA 11 AA",
-                        RFID_umbrella: "none",
                         borrow: false,
                         return: false,
-                        borrow_place: "none",
                         borrow_date: "none",
                         days_elapsed: "none",
-                        weight_before: 1000,
-                        weight_after: "none",
                         total_token: 100,
                     });
                     set(ref(db, 'umbrellas/'), {
                         North: 3,
                         East: 0,
                         West: 0,
+                    })
+                    set(ref(db, 'controls/'), {
+                        RFID_user: "",
+                        open: false,
+                        weight_before: "",
+                        weight_after: "",
                     })
                     window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn";
                 }

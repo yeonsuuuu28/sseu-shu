@@ -7,6 +7,8 @@ import Main from "./Pages/Main"
 import Weather from "./Pages/Weather"
 import BorrowReturn from "./Pages/BorrowReturn"
 import MyPage from "./Pages/MyPage"
+import Borrowing from "./Pages/Borrowing"
+import Returning from "./Pages/Returning"
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="/main" element={<Main/>}/>
           <Route path="/weather" element={<Weather/>}/>
           <Route path="/:username/borrowreturn" element={<BorrowReturn/>}/>
+          <Route path="/:username/borrow" element={<Borrowing/>}/>
+          <Route path="/:username/return" element={<Returning/>}/>
           <Route path="/:username/mypage" element={<MyPage/>}/>
         </Routes>
       </BrowserRouter>
