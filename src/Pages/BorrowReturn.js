@@ -57,7 +57,7 @@ const BorrowReturn = () => {
             borrow: true,
             days_elapsed: 0
         });
-        window.location.href = "/" + username + "/return";
+        window.location.href = "/" + username + "/borrow";
     }
 
     function handlereturn() {
