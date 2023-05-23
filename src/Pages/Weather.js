@@ -71,10 +71,8 @@ const Weather = () => {
           
     const rows = [createData(weather.temperature, weather.feels_like, weather.max, weather.min, weather.humidity)];
     
-
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
-            {console.log(weather)}
             <div style={{backgroundColor: "#2B04BE", height: "10vh", lineHeight: "10vh"}}>
                 {userInfo === null ? 
                     <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}

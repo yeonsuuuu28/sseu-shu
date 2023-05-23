@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
-import Weather_Image from "../Assets/weather.svg"
-import axios from 'axios'
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import Profile from "../Assets/profile.png"
 
 const MyPage = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
-    const [weather, setWeather] = useState("");
+    const [token, setToken] = useState("")
+    const [borrow, setBorrow] = useState("")
+    const [place, setPlace] = useState("")
+    const [date, setDate] = useState("")
+    const [elapsed, setElapsed] = useState("")
+    const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -27,14 +25,32 @@ const MyPage = () => {
       }, []);
 
     useEffect(() => {
-    return auth.onAuthStateChanged(user => {
-        setUserInfo(user);
-    })
+        return auth.onAuthStateChanged(user => {
+            setUserInfo(user);
+        })
+    }, []);
+
+    useEffect(() => {
+        let timenow = 0
+        const date = new Date();
+        const date2 = date.getDate();
+        console.log(date2)
+        const db = getDatabase();
+        const dbRef = ref(db)
+        get(child(dbRef, 'users/' + username)).then((snapshot) => {
+            update(ref(db, 'users/' + username), {
+                days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
+            });
+            setToken(snapshot.val()["total_token"])
+            setBorrow(snapshot.val()["borrow"])
+            setPlace(snapshot.val()["borrow_place"])
+            setDate(snapshot.val()["borrow_date"])
+            setElapsed(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
+        })
     }, []);
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
-            {console.log(weather)}
             <div style={{backgroundColor: "#2B04BE", height: "10vh", lineHeight: "10vh"}}>
                 {userInfo === null ? 
                     <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
@@ -58,6 +74,26 @@ const MyPage = () => {
                         <a style={{textDecoration: "none", color: "black"}} href={"/" + userInfo.email.split("@")[0] + "/mypage"}>내 페이지</a><br/>
                         <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.reload();}} href="# ">로그아웃하기</a>
                     </div> 
+            : <div></div>}
+            {userInfo !== null ? 
+                <div style={{textAlign: "center"}}>
+                    <div style={{fontFamily: "Pretendard", fontSize: "7vh", fontWeight: "700", paddingTop: "12vh"}}></div>
+                    <img src = {Profile} alt="" style={{width: "24vw", border: "1px solid black", marginTop: "8vh", float: "left", marginLeft: "22vw"}} onClick={() => {window.location.href = "/main"}}/>
+                    <div style={{width: "24vw", marginTop: "8vh", height: "30vh", float: "right", marginRight: "22vw"}}>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "5.5vh", paddingBottom: "1vh", paddingTop: "2vh"}}><b>{userInfo.displayName}</b></div> <br/>
+                        <div style={{float: "left", fontFamily: "Pretendard", lineHeight: "2", textAlign: "right", fontSize: "2.7vh"}}>
+                            <b>이메일 주소</b>:<br/><b>보유 토큰</b>:<br/><b>대여 여부</b>:<br/><b>대여 장소</b>:<br/><b>대여 일자</b>:<br/><b>대여 기간</b>:<br/>
+                        </div>
+                        <div style={{float: "right", fontFamily: "Pretendard", lineHeight: "2", textAlign: "left", paddingRight: "0.3vw", fontSize: "2.7vh"}}>
+                            {userInfo.email} <br/>
+                            {token} 토큰 <br/>
+                            {borrow === true ? <>예</> : <>아니오</>} <br/>
+                            {place === "North" ? <>카이마루</> : <>N/A</>} <br/>
+                            {date} <br/>
+                            {elapsed} 일 {elapsed > 7 ? <><b style={{color: "#b90e0a"}}>(+{elapsed - 7}일 초과)</b></> : <></>} <br/>
+                        </div>
+                    </div>
+                </div>
             : <div></div>}
         </div>
     )
