@@ -106,7 +106,7 @@ const Borrowing = () => {
                         <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "5vh", paddingTop: "4vh", paddingBottom: "4vh"}}>토큰 소모 안내</div>
                         <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "2.5vh"}}>우산 대여에는 50 토큰이 필요합니다. 진행하시겠습니까?</div>
                         <div style={{paddingTop: "3vh", fontFamily: "Pretendard", fontSize: "2.5vh"}}><b>현재 토큰</b>: {token}</div>
-                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: &nbsp; {token - 50} </div>
+                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: {token - 50} </div>
                         <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
                             onClick={() => handleborrow1()}>
                             <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>

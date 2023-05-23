@@ -41,6 +41,7 @@ const MyPage = () => {
             update(ref(db, 'users/' + username), {
                 days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
             });
+            //need to decrease token
             setToken(snapshot.val()["total_token"])
             setBorrow(snapshot.val()["borrow"])
             setPlace(snapshot.val()["borrow_place"])
