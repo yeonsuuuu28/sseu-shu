@@ -50,7 +50,7 @@ const BorrowInst2 = () => {
                 open1 = snapshot.val()["open"]
                 if ((parseInt(weight_before) - parseInt(weight_after)) >= 100 && open1 === false) {
                     update(ref(db, 'controls/'), {
-                        weight_before: "",
+                        weight_before: 1000,
                         weight_after: "",
                     });
                     setUmb("대여가 확인되었습니다.")

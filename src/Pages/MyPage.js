@@ -90,8 +90,8 @@ const MyPage = () => {
                             {token} 토큰 <br/>
                             {borrow === true ? <>예</> : <>아니오</>} <br/>
                             {place === "North" ? <>카이마루</> : <>N/A</>} <br/>
-                            {date} <br/>
-                            {elapsed} 일 {elapsed > 7 ? <><b style={{color: "#b90e0a"}}>(+{elapsed - 7}일 초과)</b></> : <></>} <br/>
+                            {date === "" ? <>N/A</> : date} <br/>
+                            {elapsed === "" ? <>N/A</> : <>{elapsed} 일</>} {elapsed > 7 ? <><b style={{color: "#b90e0a"}}>(+{elapsed - 7}일 초과)</b></> : <></>} <br/>
                         </div>
                     </div>
                 </div>
