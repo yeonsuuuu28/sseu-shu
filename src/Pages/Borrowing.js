@@ -10,14 +10,14 @@ import Card from "../Assets/card.svg"
 import Map from "../Assets/map.png"
 import Modal from '@mui/material/Modal';
 
-const Returning = () => {
+const Borrowing = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
-    const [page, setPage] = useState(1)
     const [umbrella, setUmbrella] = useState([[0,0], [0,0], [0,0]])
     const [token, setToken] = useState(0)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [openModal, setOpenModal] = useState(false);
+    const [tag, setTag] = useState("대기 중...")
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
 
@@ -59,13 +59,12 @@ const Returning = () => {
             update(ref(db, 'umbrellas/'), {
                 North: remaining_umbre
             });
-            setPage(2)
+            window.location.href = "/" + username + "/borrowinst1"
         }
         else {
             alert("토큰이 부족하여 대여를 진행할 수 없습니다.");
             window.location.href = "/main"
         }
-
     }
 
     return (
@@ -94,51 +93,44 @@ const Returning = () => {
                     <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.href = "/main";}} href="# ">로그아웃하기</a>
                 </div>
             : <div></div>}
-            {page === 1 ? 
-                <div style={{textAlign: "center"}}>
-                    <img src = {Map} alt="" style={{height: "65vh", paddingTop: "8vh", opacity: "0.4"}}/>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "#2B04BE", width: "5vh", height: "5vh", top: "40%", left: "46%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", cursor: "pointer", boxShadow: "5px 5px 10px grey", zIndex: "2"}}
-                        onClick={() => handleOpen()}>
-                        {umbrella[1][1]}
-                    </div>
-                    <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-                        <div style={{textAlign: "center", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "40vw", height: "40vh", boxShadow: "24", backgroundColor: "white", outline: "none", border: "2px solid black"}}>
-                            <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "24pt", paddingTop: "4vh", paddingBottom: "4vh"}}>토큰 소모 안내</div>
-                            <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "13pt"}}>우산 대여에는 50 토큰이 필요합니다. 진행하시겠습니까?</div>
-                            <div style={{paddingTop: "3vh"}}><b>현재 토큰</b>: {token}</div>
-                            <div><b>잔여 토큰</b>: &nbsp; {token - 50} </div>
-                            <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
-                                onClick={() => handleborrow1()}>
-                                <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>
-                            </div>
-                            <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "white", marginTop: "4vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "right", marginRight: "5vw", border: "1px solid #2B04BE"}}
-                                onClick={() => handleClose()}>
-                                <div style={{verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}} >취소</div>
-                            </div>
+            <div style={{textAlign: "center"}}>
+                <img src = {Map} alt="" style={{height: "65vh", paddingTop: "8vh", opacity: "0.4"}}/>
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "#2B04BE", width: "5vh", height: "5vh", top: "40%", left: "46%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", cursor: "pointer", boxShadow: "5px 5px 10px grey", zIndex: "2"}}
+                    onClick={() => handleOpen()}>
+                    {umbrella[1][1]}
+                </div>
+                <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+                    <div style={{textAlign: "center", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "40vw", height: "40vh", boxShadow: "24", backgroundColor: "white", outline: "none", border: "2px solid black"}}>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "5vh", paddingTop: "4vh", paddingBottom: "4vh"}}>토큰 소모 안내</div>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "2.5vh"}}>우산 대여에는 50 토큰이 필요합니다. 진행하시겠습니까?</div>
+                        <div style={{paddingTop: "3vh", fontFamily: "Pretendard", fontSize: "2.5vh"}}><b>현재 토큰</b>: {token}</div>
+                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: &nbsp; {token - 50} </div>
+                        <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
+                            onClick={() => handleborrow1()}>
+                            <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>
                         </div>
-                    </Modal>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "64.5%", left: "42.5%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
-                        {umbrella[2][1]}
+                        <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "white", marginTop: "4vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "right", marginRight: "5vw", border: "1px solid #2B04BE"}}
+                            onClick={() => handleClose()}>
+                            <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}} >취소</div>
+                        </div>
                     </div>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "61%", left: "52%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
-                        {umbrella[0][1]}
-                    </div>
-                    <div style={{fontFamily: "Pretendard", fontSize: "5vh", fontWeight: "700", paddingTop: "2vh"}}>대여 장소를 선택해주세요</div>
+                </Modal>
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "grey", width: "5vh", height: "5vh", top: "64.5%", left: "42.5%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                    {umbrella[2][1]}
                 </div>
-            : <div></div>}
-            {page === 2 ? 
-                <div style={{textAlign: "center"}}>
-                    hi
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "grey", width: "5vh", height: "5vh", top: "61%", left: "52%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                    {umbrella[0][1]}
                 </div>
-            : <div></div>}
+                <div style={{fontFamily: "Pretendard", fontSize: "5vh", fontWeight: "700", paddingTop: "2vh"}}>대여 장소를 선택해주세요</div>
+            </div>
         </div>
     )
 }
 
-export default Returning
+export default Borrowing
