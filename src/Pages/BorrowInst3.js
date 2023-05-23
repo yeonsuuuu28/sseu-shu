@@ -13,8 +13,22 @@ const BorrowInst2 = () => {
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [umb, setUmb] = useState("대기 중...")
     const [weight, setWeight] = useState(0)
+    const [time, setTime] = useState(5)
 
-    setInterval(checkBorrow, 1000);
+    useEffect(() => {
+        if (time > 0) {
+            const timer = window.setInterval(() => {
+                setTime(prevTime => prevTime - 1);
+            }, 1000);
+            return () => {
+            window.clearInterval(timer);
+            };
+        }
+        else {
+            window.location.href = "/main"
+        }
+
+    }, [time])
 
     useEffect(() => {
         const db = getDatabase();
@@ -37,30 +51,6 @@ const BorrowInst2 = () => {
             setUserInfo(user);
         })
     }, []);
-
-    function checkBorrow() {
-        const db = getDatabase();
-        const dbRef = ref(db)
-        var weight_before = weight
-        var weight_after = 0
-        var open1 = true
-        get(child(dbRef, 'controls/')).then((snapshot) => {
-            weight_after = snapshot.val()["weight_after"]
-            get(child(dbRef, 'controls/')).then((snapshot) => {
-                open1 = snapshot.val()["open"]
-                if ((parseInt(weight_before) - parseInt(weight_after)) >= 100 && open1 === false) {
-                    update(ref(db, 'controls/'), {
-                        weight_before: "",
-                        weight_after: "",
-                    });
-                    setUmb("대여가 확인되었습니다.")
-                    setTimeout(function() {
-                        window.location.href = "/" + username + "/borrowinst3"
-                    }, 1000);
-                }
-            })
-        })
-    }
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
@@ -89,9 +79,9 @@ const BorrowInst2 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "5vh", fontWeight: "700", paddingTop: "15vh", lineHeight: "1.5"}}>보관함이 개방되었습니다. <br/> 우산을 <u>하나</u> 꺼낸 후 문을 닫아주세요.</div> <br/>
-                <img src = {Umb} alt="" style={{height: "35vh", paddingTop: "3vh"}}/> <br/>
-                <div style={{fontSize: "3vh", fontWeight: "500", paddingTop: "5vh"}}>{umb}</div>
+                <div style={{fontSize: "9vh", fontWeight: "700", paddingTop: "30vh", lineHeight: "1.5"}}>우산 대여가 완료되었습니다 :)</div> <br/> 
+                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "3vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
+
             </div>
         </div>
     )

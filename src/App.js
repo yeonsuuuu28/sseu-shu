@@ -11,6 +11,7 @@ import Borrowing from "./Pages/Borrowing"
 import Returning from "./Pages/Returning"
 import BorrowInst1 from "./Pages/BorrowInst1"
 import BorrowInst2 from "./Pages/BorrowInst2"
+import BorrowInst3 from "./Pages/BorrowInst3"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/:username/borrow" element={<Borrowing/>}/>
           <Route path="/:username/borrowinst1" element={<BorrowInst1/>}/>
           <Route path="/:username/borrowinst2" element={<BorrowInst2/>}/>
+          <Route path="/:username/borrowinst3" element={<BorrowInst3/>}/>
           <Route path="/:username/return" element={<Returning/>}/>
           <Route path="/:username/mypage" element={<MyPage/>}/>
         </Routes>
