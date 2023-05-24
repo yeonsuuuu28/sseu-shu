@@ -10,19 +10,19 @@ const BorrowInst2 = () => {
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [time, setTime] = useState(5)
 
-    // useEffect(() => {
-    //     if (time > 0) {
-    //         const timer = window.setInterval(() => {
-    //             setTime(prevTime => prevTime - 1);
-    //         }, 1000);
-    //         return () => {
-    //         window.clearInterval(timer);
-    //         };
-    //     }
-    //     else {
-    //         window.location.href = "/main"
-    //     }
-    // }, [time])
+    useEffect(() => {
+        if (time > 0) {
+            const timer = window.setInterval(() => {
+                setTime(prevTime => prevTime - 1);
+            }, 1000);
+            return () => {
+            window.clearInterval(timer);
+            };
+        }
+        else {
+            window.location.href = "/main"
+        }
+    }, [time])
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
