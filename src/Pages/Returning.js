@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, TextField }  from '@mui/material';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
-import Rain from "../Assets/raining.svg"
-import Return from "../Assets/return.svg"
-import Borrow from "../Assets/borrow.svg"
+import Card from "../Assets/card.svg"
 import Map from "../Assets/map.png"
-import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
-import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
+import Modal from '@mui/material/Modal';
 
 const Returning = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
-    const [page, setPage] = useState("landing")
-    const [umbrella, setUmbrella] = useState("")
+    const [umbrella, setUmbrella] = useState([[0,0], [0,0], [0,0]])
+    const [token, setToken] = useState(0)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
-
-    useEffect(() => {
-        getRedirectResult(auth).then((result) => {
-            const user = result.user;
-            console.log(user)
-            setUserInfo(user)
-        })
-      }, []);
+    const [openModal, setOpenModal] = useState(false);
+    const [elapsed, setElapsed] = useState(0)
+    const [returnT, setReturnT] = useState(0)
+    const handleOpen = () => setOpenModal(true);
+    const handleClose = () => setOpenModal(false);
     
-    useEffect(() => {
-    return auth.onAuthStateChanged(user => {
-        setUserInfo(user);
-    })
-    }, []);
 
     useEffect(() => {
         const db = getDatabase();
@@ -40,42 +27,49 @@ const Returning = () => {
         get(child(dbRef, 'umbrellas/')).then((snapshot) => {
             setUmbrella(Object.entries(snapshot.val()))
         })
-    })
+        get(child(dbRef, 'users/' + username)).then((snapshot) => {
+            setToken(snapshot.val()["total_token"])
+            setElapsed(snapshot.val()["days_elapsed"])
+        })
+    }, [])
+
+    useEffect(() => {
+        getRedirectResult(auth).then((result) => {
+            const user = result.user;
+            console.log(user)
+            setUserInfo(user)
+        })
+    }, []);
+    
+    useEffect(() => {
+        return auth.onAuthStateChanged(user => {
+            setUserInfo(user);
+        })
+    }, []);
+
+    function returntoken() {
+
+    }
 
     function handleborrow1() {
-        setPage("borrow1")
-
-        let timenow = 0
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const date2 = date.getDate();
-        const dateStr = year + "-" + month + "-" + date2
-        timenow = dateStr
-
         const db = getDatabase();
         const dbRef = ref(db)
-        update(ref(db, 'users/' + username), {
-            borrow_date: timenow,
-            borrow: true,
-            days_elapsed: 0
-        });
-    }
-
-    function handleborrow2() {
-        setPage("borrow2")
-
-        const db = getDatabase();
-        const dbRef = ref(db)
-        update(ref(db, 'users/' + username), {
-            borrow_place: "North",
-        });
-        console.log(page)
-    }
-
-
-    function handlereturn() {
-        
+        let remaining_token = token - 50
+        let remaining_umbre = umbrella[1][1] - 1
+        if (remaining_token >= 0) {
+            update(ref(db, 'users/' + username), {
+                borrow_place: "North",
+                total_token: remaining_token
+            });
+            update(ref(db, 'umbrellas/'), {
+                North: remaining_umbre
+            });
+            window.location.href = "/" + username + "/borrowinst1"
+        }
+        else {
+            alert("토큰이 부족하여 대여를 진행할 수 없습니다.");
+            window.location.href = "/main"
+        }
     }
 
     return (
@@ -99,60 +93,47 @@ const Returning = () => {
                 </div>
             </div>
             {open ? 
-                    <div style={{float: "right", paddingRight: "3vw", paddingLeft: "3vw", paddingTop: "2vh", paddingBottom: "2vh", lineHeight: "2.5", fontFamily: "Pretendard", fontWeight: "600", textAlign: "center", borderLeft: "1px solid black", borderBottom: "1px solid black", backgroundColor: "white"}}>
-                        <a style={{textDecoration: "none", color: "black"}} href={"/" + userInfo.email.split("@")[0] + "/mypage"}>내 페이지</a><br/>
-                        <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.href = "/main";}} href="# ">로그아웃하기</a>
-                    </div>
-            : <div></div>}
-            {page === "landing" ? 
-                <div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "72vh"}}>
-                    <table style={{marginLeft: "auto", marginRight: "auto", borderSpacing: "0", paddingTop: "13vh"}}>
-                        <tr>
-                            <td style={{borderRight: "0px solid black", textAlign: "center"}}>
-                                <div className="zoom" onClick={() => handleborrow1()} style={{border: "5px solid black", marginRight: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
-                                    <ArrowCircleDownRoundedIcon style={{fontSize: "18vw"}}/>
-                                    <div style={{paddingTop: "3vh"}}></div>
-                                    대여하기
-                                </div>
-                            </td>
-                            <td style={{borderLeft: "0.5px solid black", textAlign: "center"}}>
-                                <div className="zoom" style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
-                                    <ArrowCircleUpRoundedIcon style={{fontSize: "18vw"}}/>
-                                    <div style={{paddingTop: "3vh"}}></div>
-                                    반납하기
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                <div style={{float: "right", paddingRight: "3vw", paddingLeft: "3vw", paddingTop: "2vh", paddingBottom: "2vh", lineHeight: "2.5", fontFamily: "Pretendard", fontWeight: "600", textAlign: "center", borderLeft: "1px solid black", borderBottom: "1px solid black", backgroundColor: "white"}}>
+                    <a style={{textDecoration: "none", color: "black"}} href={"/" + userInfo.email.split("@")[0] + "/mypage"}>내 페이지</a><br/>
+                    <a style={{textDecoration: "none", color: "black"}} onClick={() => {signOutWithGoogle(); window.location.href = "/main";}} href="# ">로그아웃하기</a>
                 </div>
             : <div></div>}
-            {page === "borrow1" ? 
-                <div style={{textAlign: "center"}}>
-                    <img src = {Map} alt="" style={{height: "65vh", paddingTop: "8vh", opacity: "0.4"}}/>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "#2B04BE", width: "5vh", height: "5vh", top: "40%", left: "46%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", cursor: "pointer", boxShadow: "5px 5px 10px grey", zIndex: "2"}}
-                        onClick={() => handleborrow2()}>
-                        {umbrella[1][1]}
-                    </div>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "64.5%", left: "42.5%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
-                        {umbrella[2][1]}
-                    </div>
-                    <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
-                        backgroundColor: "grey", width: "5vh", height: "5vh", top: "61%", left: "52%", transform: "translate(-50%, -50%)", color: "white",
-                        fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
-                        {umbrella[0][1]}
-                    </div>
-                    <div style={{fontFamily: "Pretendard", fontSize: "5vh", fontWeight: "700", paddingTop: "2vh"}}>대여 장소를 선택해주세요</div>
+            <div style={{textAlign: "center"}}>
+                <img src = {Map} alt="" style={{height: "65vh", paddingTop: "8vh", opacity: "0.4"}}/>
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "#2B04BE", width: "5vh", height: "5vh", top: "40%", left: "46%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", cursor: "pointer", boxShadow: "5px 5px 10px grey", zIndex: "2"}}
+                    onClick={() => handleOpen()}>
+                    {umbrella[1][1]}
                 </div>
-            : <div></div>}
-            {page === "borrow2" ? 
-                <div style={{textAlign: "center"}}>
-                    hihi
+                <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+                    <div style={{textAlign: "center", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "40vw", height: "40vh", boxShadow: "24", backgroundColor: "white", outline: "none", border: "2px solid black"}}>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "5vh", paddingTop: "4vh", paddingBottom: "4vh"}}>토큰 반환 안내</div>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "2.5vh"}}>우산 대여에는 50 토큰이 필요합니다. 진행하시겠습니까?</div>
+                        <div style={{paddingTop: "3vh", fontFamily: "Pretendard", fontSize: "2.5vh"}}><b>현재 토큰</b>: {token}</div>
+                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: {token - 50} </div>
+                        <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
+                            onClick={() => handleborrow1()}>
+                            <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>
+                        </div>
+                        <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "white", marginTop: "4vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "right", marginRight: "5vw", border: "1px solid #2B04BE"}}
+                            onClick={() => handleClose()}>
+                            <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}} >취소</div>
+                        </div>
+                    </div>
+                </Modal>
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "grey", width: "5vh", height: "5vh", top: "64.5%", left: "42.5%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                    {umbrella[2][1]}
                 </div>
-            : <div></div>}
+                <div style={{position: "absolute", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%",
+                    backgroundColor: "grey", width: "5vh", height: "5vh", top: "61%", left: "52%", transform: "translate(-50%, -50%)", color: "white",
+                    fontFamily: "Pretendard", fontWeight: "700", fontSize: "2.5vh", boxShadow: "5px 5px 10px grey",}}>
+                    {umbrella[0][1]}
+                </div>
+                <div style={{fontFamily: "Pretendard", fontSize: "5vh", fontWeight: "700", paddingTop: "2vh"}}>반납 장소를 선택해주세요</div>
+            </div>
         </div>
     )
 }

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, TextField }  from '@mui/material';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
-import Card from "../Assets/card.svg"
 import Map from "../Assets/map.png"
 import Modal from '@mui/material/Modal';
 
@@ -17,7 +14,6 @@ const Borrowing = () => {
     const [token, setToken] = useState(0)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [openModal, setOpenModal] = useState(false);
-    const [tag, setTag] = useState("대기 중...")
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
 

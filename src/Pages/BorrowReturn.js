@@ -62,21 +62,13 @@ const BorrowReturn = () => {
     }
 
     function handlereturn() {
-        let timenow = 0
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const date2 = date.getDate();
-        const dateStr = year + "-" + month + "-" + date2
-        timenow = dateStr
-
         const db = getDatabase();
         const dbRef = ref(db)
         update(ref(db, 'users/' + username), {
             borrow_date: "none",
-            borrow: false,
-            days_elapsed: 0
+            borrow: false
         });
+        window.location.href = "/" + username + "/return";
     }
 
     return (
@@ -116,7 +108,7 @@ const BorrowReturn = () => {
                             </div>
                         </td>
                         <td style={{borderLeft: "0.5px solid black", textAlign: "center"}}>
-                            <div className="zoom" style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
+                            <div className="zoom" onClick={() => {if (!borrowed) {alert("대여하신 우산이 없습니다.")} else {handlereturn()}}} style={{border: "5px solid black", marginLeft: "8vw", padding: "2vw", borderRadius: "25px", fontFamily: "Pretendard", fontSize: "3vw", fontWeight: "700", boxShadow: "10px 10px 20px grey", cursor: "pointer"}}>
                                 <ArrowCircleUpRoundedIcon style={{fontSize: "18vw"}}/>
                                 <div style={{paddingTop: "3vh"}}></div>
                                 반납하기

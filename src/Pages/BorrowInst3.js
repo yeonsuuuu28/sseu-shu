@@ -1,42 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
-import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
-import Umb from "../Assets/umbrella.svg"
 
 const BorrowInst2 = () => {
     const [userInfo, setUserInfo] = useState(null)
-    const [page, setPage] = useState(1)
     const [open, setOpen] = useState(false)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
-    const [umb, setUmb] = useState("대기 중...")
-    const [weight, setWeight] = useState(0)
     const [time, setTime] = useState(5)
 
-    useEffect(() => {
-        if (time > 0) {
-            const timer = window.setInterval(() => {
-                setTime(prevTime => prevTime - 1);
-            }, 1000);
-            return () => {
-            window.clearInterval(timer);
-            };
-        }
-        else {
-            window.location.href = "/main"
-        }
-
-    }, [time])
-
-    useEffect(() => {
-        const db = getDatabase();
-        const dbRef = ref(db)
-        get(child(dbRef, 'controls/')).then((snapshot) => {
-            setWeight(snapshot.val()["weight_before"])
-        })
-    }, [])
+    // useEffect(() => {
+    //     if (time > 0) {
+    //         const timer = window.setInterval(() => {
+    //             setTime(prevTime => prevTime - 1);
+    //         }, 1000);
+    //         return () => {
+    //         window.clearInterval(timer);
+    //         };
+    //     }
+    //     else {
+    //         window.location.href = "/main"
+    //     }
+    // }, [time])
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -79,9 +65,8 @@ const BorrowInst2 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "9vh", fontWeight: "700", paddingTop: "30vh", lineHeight: "1.5"}}>우산 대여가 완료되었습니다 :)</div> <br/> 
-                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "3vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
-
+                <div style={{fontSize: "8vh", fontWeight: "700", paddingTop: "27vh", lineHeight: "1.4"}}>우산 대여가 완료되었습니다. <br/> 7일 내로 반납 바랍니다 :)</div> <br/> 
+                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "5vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
             </div>
         </div>
     )
