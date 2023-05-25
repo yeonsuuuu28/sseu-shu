@@ -38,6 +38,8 @@ const MyPage = () => {
         const db = getDatabase();
         const dbRef = ref(db)
         get(child(dbRef, 'users/' + username)).then((snapshot) => {
+            console.log(snapshot.val()["borrow_date"])
+            console.log(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
             update(ref(db, 'users/' + username), {
                 days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
             });
@@ -86,6 +88,7 @@ const MyPage = () => {
                             <b>이메일 주소</b>:<br/><b>보유 토큰</b>:<br/><b>대여 여부</b>:<br/><b>대여 장소</b>:<br/><b>대여 일자</b>:<br/><b>대여 기간</b>:<br/>
                         </div>
                         <div style={{float: "right", fontFamily: "Pretendard", lineHeight: "2", textAlign: "left", paddingRight: "0.3vw", fontSize: "2.7vh"}}>
+                            {console.log(token, borrow, place, date)}
                             {userInfo.email} <br/>
                             {token} 토큰 <br/>
                             {borrow === true ? <>예</> : <>아니오</>} <br/>

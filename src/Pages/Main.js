@@ -40,7 +40,7 @@ const Main = () => {
                     }
                     else {
                         set(ref(db, 'users/' + userInfo.email.split('@')[0]), {
-                            RFID_user: "11 AA 11 AA",
+                            RFID_user: "A3 EC 21 13",
                             borrow: false,
                             borrow_date: "none",
                             days_elapsed: "none",
@@ -51,7 +51,7 @@ const Main = () => {
                 }
                 else {
                     set(ref(db, 'users/' + userInfo.email.split('@')[0]), {
-                        RFID_user: "11 AA 11 AA",
+                        RFID_user: "A3 EC 21 13",
                         borrow: false,
                         borrow_date: "none",
                         days_elapsed: "none",
