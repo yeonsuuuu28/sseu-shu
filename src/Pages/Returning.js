@@ -61,31 +61,17 @@ const Returning = () => {
         })
     }, []);
 
-    //need to make button for updating token
-    function handleborrow1() {
+    function handlereturn1() {
         const db = getDatabase();
         const dbRef = ref(db)
-        let remaining_token = token - 50
-        let remaining_umbre = umbrella[1][1] - 1
-        if (remaining_token >= 0) {
-            update(ref(db, 'users/' + username), {
-                borrow_place: "North",
-                total_token: remaining_token
-            });
-            update(ref(db, 'umbrellas/'), {
-                North: remaining_umbre
-            });
-            window.location.href = "/" + username + "/borrowinst1"
-        }
-        else {
-            alert("토큰이 부족하여 대여를 진행할 수 없습니다.");
-            window.location.href = "/main"
-        }
+        update(ref(db, 'users/' + username), {
+            total_token: token + returnT
+        });
+        window.location.href = "/" + username + "/returninst1"
     }
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
-            {        console.log(returnT)}
             <div style={{backgroundColor: "#2B04BE", height: "10vh", lineHeight: "10vh"}}>
                 {userInfo === null ? 
                     <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
@@ -125,7 +111,7 @@ const Returning = () => {
                         <div style={{paddingTop: "3vh", fontFamily: "Pretendard", fontSize: "2.5vh"}}><b>현재 토큰</b>: {token}</div>
                         <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: {token + returnT} </div>
                         <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
-                            onClick={() => handleborrow1()}>
+                            onClick={() => handlereturn1()}>
                             <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>
                         </div>
                         <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "white", marginTop: "4vh", borderRadius: "10px", color: "#2B04BE", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "right", marginRight: "5vw", border: "1px solid #2B04BE"}}

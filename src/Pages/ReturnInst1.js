@@ -44,7 +44,7 @@ const ReturnInst1 = () => {
                     });
                     setTag("태그가 확인되었습니다.")
                     setTimeout(function() {
-                        window.location.href = "/" + username + "/borrowinst2"
+                        window.location.href = "/" + username + "/returninst2"
                     }, 1000);
                 }
             })

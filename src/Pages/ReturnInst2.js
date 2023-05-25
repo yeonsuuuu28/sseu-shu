@@ -89,7 +89,7 @@ const ReturnInst2 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "5vh", fontWeight: "700", paddingTop: "15vh", lineHeight: "1.5"}}>보관함이 개방되었습니다. <br/> 우산을 <u>하나</u> 꺼낸 후 문을 닫아주세요.</div> <br/>
+                <div style={{fontSize: "5vh", fontWeight: "700", paddingTop: "15vh", lineHeight: "1.5"}}>보관함이 개방되었습니다. <br/> 우산을 반납하고 문을 닫아주세요.</div> <br/>
                 <img src = {Umb} alt="" style={{height: "35vh", paddingTop: "3vh"}}/> <br/>
                 <div style={{fontSize: "3vh", fontWeight: "500", paddingTop: "5vh"}}>{umb}</div>
             </div>
