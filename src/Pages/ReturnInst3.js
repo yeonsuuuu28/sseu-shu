@@ -4,7 +4,7 @@ import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
 
-const BorrowInst3 = () => {
+const ReturnInst3 = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
@@ -72,4 +72,4 @@ const BorrowInst3 = () => {
     )
 }
 
-export default BorrowInst3
+export default ReturnInst3

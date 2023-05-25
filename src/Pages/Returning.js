@@ -15,12 +15,11 @@ const Returning = () => {
     const [token, setToken] = useState(0)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [openModal, setOpenModal] = useState(false);
-    const [elapsed, setElapsed] = useState(0)
+    const [elapsed, setElapsed] = useState(100)
     const [returnT, setReturnT] = useState(0)
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
     
-
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db)
@@ -32,6 +31,21 @@ const Returning = () => {
             setElapsed(snapshot.val()["days_elapsed"])
         })
     }, [])
+
+    useEffect(() => {
+        if (elapsed <= 7) {
+            setReturnT(50)
+        }
+        else {
+            var penalty = 50 - ((elapsed - 7) * 10)
+            if (penalty >= 0) {
+                setReturnT(penalty)
+            }
+            else {
+                setReturnT(0)
+            }
+        }
+    }, [elapsed])
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -47,10 +61,7 @@ const Returning = () => {
         })
     }, []);
 
-    function returntoken() {
-
-    }
-
+    //need to make button for updating token
     function handleborrow1() {
         const db = getDatabase();
         const dbRef = ref(db)
@@ -74,6 +85,7 @@ const Returning = () => {
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
+            {        console.log(returnT)}
             <div style={{backgroundColor: "#2B04BE", height: "10vh", lineHeight: "10vh"}}>
                 {userInfo === null ? 
                     <div style={{float: "right", color: "white", paddingRight: "2vw", fontWeight: "700", verticalAlign: "middle", fontSize: "13pt", cursor: "pointer"}}
@@ -109,9 +121,9 @@ const Returning = () => {
                 <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                     <div style={{textAlign: "center", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "40vw", height: "40vh", boxShadow: "24", backgroundColor: "white", outline: "none", border: "2px solid black"}}>
                         <div style={{fontFamily: "Pretendard", fontWeight: "700", fontSize: "5vh", paddingTop: "4vh", paddingBottom: "4vh"}}>토큰 반환 안내</div>
-                        <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "2.5vh"}}>우산 대여에는 50 토큰이 필요합니다. 진행하시겠습니까?</div>
+                        <div style={{fontFamily: "Pretendard", fontWeight: "400", fontSize: "2.5vh"}}>우산을 {elapsed}일 동안 대여하여 {returnT} 토큰이 반환됩니다. </div>
                         <div style={{paddingTop: "3vh", fontFamily: "Pretendard", fontSize: "2.5vh"}}><b>현재 토큰</b>: {token}</div>
-                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: {token - 50} </div>
+                        <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", paddingTop: "0.5vh"}}><b>잔여 토큰</b>: {token + returnT} </div>
                         <div style={{cursor: "pointer", height: "5.5vh", width: "13vw", backgroundColor: "#2B04BE", marginTop: "4vh", borderRadius: "10px", color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", zIndex: "10", float: "left", marginLeft: "5vw"}}
                             onClick={() => handleborrow1()}>
                             <div style={{fontFamily: "Pretendard", fontSize: "2.5vh", verticalAlign: "middle", fontWeight: "500", cursor: "pointer"}}>확인</div>

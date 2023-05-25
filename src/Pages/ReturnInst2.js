@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
+import Umb from "../Assets/umbrella.svg"
 
-const BorrowInst3 = () => {
+const ReturnInst2 = () => {
     const [userInfo, setUserInfo] = useState(null)
+    const [page, setPage] = useState(1)
     const [open, setOpen] = useState(false)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
-    const [time, setTime] = useState(5)
+    const [umb, setUmb] = useState("대기 중...")
+    const [weight, setWeight] = useState(0)
+
+    setInterval(checkBorrow, 1000);
 
     useEffect(() => {
-        if (time > 0) {
-            const timer = window.setInterval(() => {
-                setTime(prevTime => prevTime - 1);
-            }, 1000);
-            return () => {
-            window.clearInterval(timer);
-            };
-        }
-        else {
-            window.location.href = "/main"
-        }
-    }, [time])
+        const db = getDatabase();
+        const dbRef = ref(db)
+        get(child(dbRef, 'controls/')).then((snapshot) => {
+            setWeight(snapshot.val()["weight_before"])
+        })
+    }, [])
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -37,6 +37,30 @@ const BorrowInst3 = () => {
             setUserInfo(user);
         })
     }, []);
+
+    function checkBorrow() {
+        const db = getDatabase();
+        const dbRef = ref(db)
+        var weight_before = weight
+        var weight_after = 0
+        var open1 = true
+        get(child(dbRef, 'controls/')).then((snapshot) => {
+            weight_after = snapshot.val()["weight_after"]
+            get(child(dbRef, 'controls/')).then((snapshot) => {
+                open1 = snapshot.val()["open"]
+                if ((parseInt(weight_before) - parseInt(weight_after)) >= 100 && open1 === false) {
+                    update(ref(db, 'controls/'), {
+                        weight_before: weight_after,
+                        weight_after: "",
+                    });
+                    setUmb("대여가 확인되었습니다.")
+                    setTimeout(function() {
+                        window.location.href = "/" + username + "/borrowinst3"
+                    }, 1000);
+                }
+            })
+        })
+    }
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
@@ -65,11 +89,12 @@ const BorrowInst3 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "8vh", fontWeight: "700", paddingTop: "27vh", lineHeight: "1.4"}}>우산 대여가 완료되었습니다. <br/> 7일 내로 반납 바랍니다 :)</div> <br/> 
-                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "5vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
+                <div style={{fontSize: "5vh", fontWeight: "700", paddingTop: "15vh", lineHeight: "1.5"}}>보관함이 개방되었습니다. <br/> 우산을 <u>하나</u> 꺼낸 후 문을 닫아주세요.</div> <br/>
+                <img src = {Umb} alt="" style={{height: "35vh", paddingTop: "3vh"}}/> <br/>
+                <div style={{fontSize: "3vh", fontWeight: "500", paddingTop: "5vh"}}>{umb}</div>
             </div>
         </div>
     )
 }
 
-export default BorrowInst3
+export default ReturnInst2

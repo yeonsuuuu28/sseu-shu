@@ -1,28 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth, analytics, signInWithGoogle, signOutWithGoogle } from "../firebase.js";
 import { getAuth, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import { ref, set, update, child, get, onValue, getDatabase } from "firebase/database";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Logo from "../Assets/logo_3.png"
+import Card from "../Assets/card.svg"
 
-const BorrowInst3 = () => {
+const ReturnInst1 = () => {
     const [userInfo, setUserInfo] = useState(null)
     const [open, setOpen] = useState(false)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
-    const [time, setTime] = useState(5)
+    const [tag, setTag] = useState("대기 중...")
 
-    useEffect(() => {
-        if (time > 0) {
-            const timer = window.setInterval(() => {
-                setTime(prevTime => prevTime - 1);
-            }, 1000);
-            return () => {
-            window.clearInterval(timer);
-            };
-        }
-        else {
-            window.location.href = "/main"
-        }
-    }, [time])
+    setInterval(checkTagged, 1000);
 
     useEffect(() => {
         getRedirectResult(auth).then((result) => {
@@ -37,6 +27,29 @@ const BorrowInst3 = () => {
             setUserInfo(user);
         })
     }, []);
+
+    function checkTagged() {
+        const db = getDatabase();
+        const dbRef = ref(db)
+        var tagged_rfid = ""
+        var my_rfid = ""
+        get(child(dbRef, 'controls/')).then((snapshot) => {
+            tagged_rfid = snapshot.val()["RFID_user"]
+            get(child(dbRef, 'users/' + username)).then((snapshot) => {
+                my_rfid = snapshot.val()["RFID_user"]
+                if (tagged_rfid === my_rfid) {
+                    update(ref(db, 'controls/'), {
+                        open: true,
+                        RFID_user: "",
+                    });
+                    setTag("태그가 확인되었습니다.")
+                    setTimeout(function() {
+                        window.location.href = "/" + username + "/borrowinst2"
+                    }, 1000);
+                }
+            })
+        })
+    }
 
     return (
         <div style={{fontFamily: "Pretendard", textAlign: "left"}}>
@@ -65,11 +78,12 @@ const BorrowInst3 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "8vh", fontWeight: "700", paddingTop: "27vh", lineHeight: "1.4"}}>우산 대여가 완료되었습니다. <br/> 7일 내로 반납 바랍니다 :)</div> <br/> 
-                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "5vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
+                <div style={{fontSize: "5.5vh", fontWeight: "700", paddingTop: "17vh"}}>보관함에 ID 카드를 태그해주세요.</div> <br/>
+                <img src = {Card} alt="" style={{height: "30vh", paddingTop: "5vh"}}/> <br/>
+                <div style={{fontSize: "3vh", fontWeight: "500", paddingTop: "8vh"}}>{tag}</div>
             </div>
         </div>
     )
 }
 
-export default BorrowInst3
+export default ReturnInst1
