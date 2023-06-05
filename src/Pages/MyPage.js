@@ -39,14 +39,14 @@ const MyPage = () => {
         get(child(dbRef, 'users/' + username)).then((snapshot) => {
             if (snapshot.val()["borrow_date"] !== "none") {
                 update(ref(db, 'users/' + username), {
-                    days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
+                    days_elapsed: parseInt(parseInt(date - new Date(snapshot.val()["borrow_date"])) / (1000*60*60*24))
                 });
                 //need to decrease token
                 setToken(snapshot.val()["total_token"])
                 setBorrow(snapshot.val()["borrow"])
                 setPlace(snapshot.val()["borrow_place"])
                 setDate(snapshot.val()["borrow_date"])
-                setElapsed(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
+                setElapsed(parseInt(parseInt(date - new Date(snapshot.val()["borrow_date"])) / (1000*60*60*24)))
             }
             else {
                 //need to decrease token
