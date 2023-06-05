@@ -46,7 +46,7 @@ const BorrowInst2 = () => {
                 setTimeout(function() {
                     window.location.href = "/" + username + "/borrowinst3"
                 }, 1000);
-            }, 6000);
+            }, 4000);
         })
     }
 

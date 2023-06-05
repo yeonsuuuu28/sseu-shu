@@ -46,7 +46,7 @@ const ReturnInst2 = () => {
                 setTimeout(function() {
                     window.location.href = "/" + username + "/returninst3"
                 }, 1000);
-            }, 6000);
+            }, 4000);
         })
     }
 
