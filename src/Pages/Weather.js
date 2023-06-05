@@ -47,6 +47,9 @@ const Weather = () => {
             else if (data.weather[0].description === "실 비" || data.weather[0].description === "보통 비") {
                 description_kr = "비"
             }
+            else if (data.weather[0].description === "튼구름") {
+                description_kr = "구름"
+            }
             else {
                 description_kr = data.weather[0].description
             }

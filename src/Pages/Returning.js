@@ -64,8 +64,12 @@ const Returning = () => {
     function handlereturn1() {
         const db = getDatabase();
         const dbRef = ref(db)
+        let remaining_umbre = umbrella[1][1] + 1
         update(ref(db, 'users/' + username), {
             total_token: token + returnT
+        });
+        update(ref(db, 'umbrellas/'), {
+            North: remaining_umbre
         });
         window.location.href = "/" + username + "/returninst1"
     }

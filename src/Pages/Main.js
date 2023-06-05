@@ -65,8 +65,7 @@ const Main = () => {
                     set(ref(db, 'controls/'), {
                         RFID_user: "",
                         open: false,
-                        weight_before: 1000,
-                        weight_after: "",
+                        weight: "",
                     })
                     window.location.href = "/" + userInfo.email.split("@")[0] + "/borrowreturn";
                 }

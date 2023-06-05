@@ -65,8 +65,8 @@ const ReturnInst3 = () => {
                 </div>
             : <div></div>}
             <div style={{textAlign: "center", fontFamily: "Pretendard"}}>
-                <div style={{fontSize: "8vh", fontWeight: "700", paddingTop: "27vh", lineHeight: "1.4"}}>우산 대여가 완료되었습니다. <br/> 7일 내로 반납 바랍니다 :)</div> <br/> 
-                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "5vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
+                <div style={{fontSize: "8vh", fontWeight: "700", paddingTop: "32vh", lineHeight: "1.4"}}>이용해주셔서 감사합니다.</div> <br/> 
+                <div style={{fontSize: "4vh", fontWeight: "400", paddingTop: "3vh"}}>{time}초 후 메인 페이지로 돌아갑니다.</div>
             </div>
         </div>
     )

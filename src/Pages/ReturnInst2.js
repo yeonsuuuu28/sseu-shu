@@ -12,16 +12,12 @@ const ReturnInst2 = () => {
     const [open, setOpen] = useState(false)
     const username = window.location.href.split("/")[window.location.href.split("/").length - 2]
     const [umb, setUmb] = useState("대기 중...")
-    const [weight, setWeight] = useState(0)
 
     setInterval(checkBorrow, 1000);
 
     useEffect(() => {
         const db = getDatabase();
         const dbRef = ref(db)
-        get(child(dbRef, 'controls/')).then((snapshot) => {
-            setWeight(snapshot.val()["weight_before"])
-        })
     }, [])
 
     useEffect(() => {
@@ -41,24 +37,16 @@ const ReturnInst2 = () => {
     function checkBorrow() {
         const db = getDatabase();
         const dbRef = ref(db)
-        var weight_before = weight
-        var weight_after = 0
-        var open1 = true
         get(child(dbRef, 'controls/')).then((snapshot) => {
-            weight_after = snapshot.val()["weight_after"]
-            get(child(dbRef, 'controls/')).then((snapshot) => {
-                open1 = snapshot.val()["open"]
-                if ((parseInt(weight_before) - parseInt(weight_after)) >= 100 && open1 === false) {
-                    update(ref(db, 'controls/'), {
-                        weight_before: weight_after,
-                        weight_after: "",
-                    });
-                    setUmb("대여가 확인되었습니다.")
-                    setTimeout(function() {
-                        window.location.href = "/" + username + "/borrowinst3"
-                    }, 1000);
-                }
-            })
+            update(ref(db, 'controls/'), {
+                open: false
+            });
+            setTimeout(function() {
+                setUmb("반납이 확인되었습니다.")
+                setTimeout(function() {
+                    window.location.href = "/" + username + "/returninst3"
+                }, 1000);
+            }, 6000);
         })
     }
 
