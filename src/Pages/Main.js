@@ -43,6 +43,7 @@ const Main = () => {
                             RFID_user: "A3 EC 21 13",
                             borrow: false,
                             borrow_date: "none",
+                            borrow_place: "none",
                             days_elapsed: "none",
                             total_token: 100,
                         });
@@ -54,6 +55,7 @@ const Main = () => {
                         RFID_user: "A3 EC 21 13",
                         borrow: false,
                         borrow_date: "none",
+                        borrow_place: "none",
                         days_elapsed: "none",
                         total_token: 100,
                     });

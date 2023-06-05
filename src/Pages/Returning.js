@@ -66,7 +66,8 @@ const Returning = () => {
         const dbRef = ref(db)
         let remaining_umbre = umbrella[1][1] + 1
         update(ref(db, 'users/' + username), {
-            total_token: token + returnT
+            total_token: token + returnT,
+            borrow_place: "none"
         });
         update(ref(db, 'umbrellas/'), {
             North: remaining_umbre

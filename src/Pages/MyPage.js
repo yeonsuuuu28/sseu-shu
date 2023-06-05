@@ -34,21 +34,28 @@ const MyPage = () => {
         let timenow = 0
         const date = new Date();
         const date2 = date.getDate();
-        console.log(date2)
         const db = getDatabase();
         const dbRef = ref(db)
         get(child(dbRef, 'users/' + username)).then((snapshot) => {
-            console.log(snapshot.val()["borrow_date"])
-            console.log(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
-            update(ref(db, 'users/' + username), {
-                days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
-            });
-            //need to decrease token
-            setToken(snapshot.val()["total_token"])
-            setBorrow(snapshot.val()["borrow"])
-            setPlace(snapshot.val()["borrow_place"])
-            setDate(snapshot.val()["borrow_date"])
-            setElapsed(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
+            if (snapshot.val()["borrow_date"] !== "none") {
+                update(ref(db, 'users/' + username), {
+                    days_elapsed: parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2])
+                });
+                //need to decrease token
+                setToken(snapshot.val()["total_token"])
+                setBorrow(snapshot.val()["borrow"])
+                setPlace(snapshot.val()["borrow_place"])
+                setDate(snapshot.val()["borrow_date"])
+                setElapsed(parseInt(date2) - parseInt(snapshot.val()["borrow_date"].split("-")[2]))
+            }
+            else {
+                //need to decrease token
+                setToken(snapshot.val()["total_token"])
+                setBorrow(snapshot.val()["borrow"])
+                setPlace("N/A")
+                setDate("N/A")
+                setElapsed("N/A")
+            }
         })
     }, []);
 
@@ -88,13 +95,13 @@ const MyPage = () => {
                             <b>이메일 주소</b>:<br/><b>보유 토큰</b>:<br/><b>대여 여부</b>:<br/><b>대여 장소</b>:<br/><b>대여 일자</b>:<br/><b>대여 기간</b>:<br/>
                         </div>
                         <div style={{float: "right", fontFamily: "Pretendard", lineHeight: "2", textAlign: "left", paddingRight: "0.3vw", fontSize: "2.7vh"}}>
-                            {console.log(token, borrow, place, date)}
+                            {console.log(token)}
                             {userInfo.email} <br/>
                             {token} 토큰 <br/>
                             {borrow === true ? <>예</> : <>아니오</>} <br/>
-                            {place === "North" ? <>카이마루</> : <>N/A</>} <br/>
-                            {date === "" ? <>N/A</> : date} <br/>
-                            {elapsed === "" ? <>N/A</> : <>{elapsed} 일</>} {elapsed > 7 ? <><b style={{color: "#b90e0a"}}>(+{elapsed - 7}일 초과)</b></> : <></>} <br/>
+                            {place === "N/A" ? <>N/A</> : <>카이마루</>} <br/>
+                            {date === "N/A" ? <>N/A</> : date} <br/>
+                            {elapsed === "N/A" ? <>N/A</> : <>{elapsed} 일</>} {elapsed > 7 ? <><b style={{color: "#b90e0a"}}>(+{elapsed - 7}일 초과)</b></> : <></>} <br/>
                         </div>
                     </div>
                 </div>
